@@ -5,7 +5,7 @@ from typing import Dict, Any, List
 from bs4 import BeautifulSoup
 from tab import UltimateTab, UltimateTabInfo
 
-
+#Tutte le classi che mi serve prendere da UG
 class UltimateTabInfo:
     def __init__(self, title, artist, author, difficulty, key, capo, tuning):
         self.title = title
@@ -16,46 +16,48 @@ class UltimateTabInfo:
         self.capo = capo
         self.tuning = tuning
 
-
+   
 class UltimateTab:
+    # Rappresenta la struttura di una tab con le sue linee
+    # (accordi, testo o righe vuote).
     def __init__(self):
         self.lines = []
-
+    # Rappresenta una riga vuota
     def append_blank_line(self):
         self.lines.append({"type": "blank", "text": ""})
-
+    # Rappresenta una riga di accordi
     def append_chord_line(self, line: str):
         self.lines.append({"type": "chords", "text": line})
-
+    # Rappresenta una riga di testo
     def append_lyric_line(self, line: str):
         self.lines.append({"type": "lyrics", "text": line})
-
+    # Rappresenta una riga di testo
     def as_json_dictionary(self):
         return {"lines": self.lines}
 
-
+# Estrae le informazioni di una tab da un oggetto BeautifulSoup
 def _tab_info_from_soup(soup: BeautifulSoup) -> UltimateTabInfo:
     try:
-        song_title = soup.find(attrs={'itemprop': 'name'}).text
-        song_title = re.compile(re.escape('chords'), re.IGNORECASE).sub('', song_title).strip()
+        song_title = soup.find(attrs={'itemprop': 'name'}).text # Titolo della canzone
+        song_title = re.compile(re.escape('chords'), re.IGNORECASE).sub('', song_title).strip() # Rimuovi "chords"
     except:
         song_title = "UNKNOWN"
 
-    try:
+    try: # Estrae il nome dell'artista
         artist_name = soup.find(attrs={'class': 't_autor'}).text.replace('\n', '')
         artist_name = re.compile(re.escape('by'), re.IGNORECASE).sub('', artist_name).strip()
     except:
         artist_name = "UNKNOWN"
-
+    # Estrae il nome dell'autore
     author = "UNKNOWN"
     difficulty = None
     key = None
     capo = None
     tuning = None
-
+    # Estrae le informazioni aggiuntive
     try:
         info_header_text = soup.find(attrs={'class': 't_dt'}).text.replace('\n', '')
-        info_headers = [x.lower() for x in info_header_text.split(' ') if x]
+        info_headers = [x.lower() for x in info_header_text.split(' ') if x] 
         info_header_values = soup.findAll(attrs={'class': 't_dtde'})
 
         for index, header in enumerate(info_headers):
@@ -78,7 +80,7 @@ def _tab_info_from_soup(soup: BeautifulSoup) -> UltimateTabInfo:
     return UltimateTabInfo(song_title, artist_name, author, difficulty, key, capo, tuning)
 
 
-def _extract_from_next_data_json(data: Dict[str, Any]) -> Dict[str, Any]:
+def _extract_from_next_data_json(data: Dict[str, Any]) -> Dict[str, Any]:       #per ora non la sto usando
     def build_tab(tab_view: Dict[str, Any], song_info: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "tab": {
@@ -121,7 +123,7 @@ def _extract_from_next_data_json(data: Dict[str, Any]) -> Dict[str, Any]:
 def html_tab_to_json_dict(html_body: str, pre_class_tags: List[str]) -> Dict[str, Any]:
     """
     Converte l'HTML di Ultimate Guitar in un dizionario della tab.
-    1) Prova JSON in __NEXT_DATA__ (moderno)
+    1) Prova JSON in __NEXT_DATA__, per il momento questo non sono riuscito ad usarlo
     2) Fallback robusto: trova il <pre> con più <span data-name="..."> (accordi)
     """
     soup = BeautifulSoup(html_body, "html.parser")
@@ -225,10 +227,10 @@ def fetch_tab_from_url(url: str) -> Dict[str, Any]:
     resp = requests.get(url, timeout=12, headers={"User-Agent": "Mozilla/5.0"})
     if resp.status_code != 200:
         raise Exception(f"Errore HTTP {resp.status_code}")
-    return html_tab_to_json_dict(resp.text, pre_class_tags=["js-tab-content", "js-store"])  # aggiungi classi se servono
+    return html_tab_to_json_dict(resp.text, pre_class_tags=["js-tab-content", "js-store"]) 
 
 
 if __name__ == "__main__":
-    url = "https://tabs.ultimate-guitar.com/tab/red-hot-chili-peppers/strip-my-mind-chords-517273"  # <-- metti qui un link reale
+    url = "https://tabs.ultimate-guitar.com/tab/red-hot-chili-peppers/strip-my-mind-chords-517273"  
     tab_data = fetch_tab_from_url(url)
     print(json.dumps(tab_data, indent=2))
