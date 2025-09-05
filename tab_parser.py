@@ -26,7 +26,7 @@ UG_PRE_CLASSES = ['js-tab-content', 'js-copy-content', 'js-store']  # solo hint 
 _scraper = cloudscraper.create_scraper()  # <-- al posto di requests
 RENDER_WAIT_SELECTORS = [
     "pre span[data-name]",  # chord spans dentro il pre
-    "script#__NEXT_DATA__", # json next.js (se c'è)
+    "script#__NEXT_DATA__", # json next.js 
 ]
 
 def _get_html_via_playwright(url: str, timeout_ms: int = 12000) -> str:

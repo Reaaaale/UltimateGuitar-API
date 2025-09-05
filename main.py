@@ -67,7 +67,7 @@ def tab_pdf(url: str = Query(..., description="Ultimate Guitar tab URL")):
         artist = tab.get("artist_name") or "UNKNOWN"
         lines = tab.get("lines") or []
 
-        # ----- genera PDF (monospace, A4, con interruzioni pagina automatiche)
+        # genera PDF 
         from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import A4
         from reportlab.lib.units import mm

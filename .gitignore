@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.pkl
+
+# Virtual env
+.venv/
+env/
+venv/
+ENV/
+
+# Logs
+*.log
+*.tmp
+*.bak
+
+# Playwright
+.playwright/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Env files
+.env
+*.env
