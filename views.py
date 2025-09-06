@@ -1,7 +1,7 @@
 # main.py
 from fastapi import FastAPI, HTTPException, Query
 from urllib.parse import urlparse
-from tab_parser import dict_from_ultimate_tab  # importiamo la logica di parsing
+from tab_parser import dict_from_ultimate_tab  
 
 app = FastAPI()
 
