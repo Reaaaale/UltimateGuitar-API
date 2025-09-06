@@ -166,7 +166,7 @@ def html_tab_to_json_dict(html_body: str, pre_class_tags: List[str]) -> Dict[str
         except Exception:
             pass  # vai al fallback <pre>
 
-    # 2) Fallback robusto su <pre> (niente fiducia nei nomi classe)
+    # 2) Fallback robusto su <pre>
     # Trova tutti i <pre>, scegli quello con più <span data-name="...">
     pre_candidates = soup.find_all("pre")
     best_pre = None
@@ -183,13 +183,10 @@ def html_tab_to_json_dict(html_body: str, pre_class_tags: List[str]) -> Dict[str
     if not best_pre:
         return {}
 
-    # Converte il contenuto del <pre> in stringa preservando newline
+    
     formatted_tab_string = ''.join(map(str, best_pre.contents))
 
-    # Parsing linea per linea:
-    # - se la linea contiene <span> → è una riga di accordi (rimuoviamo i tag)
-    # - se vuota → blank
-    # - altrimenti → lyrics
+
     tab = UltimateTab()
     re_span_tag = re.compile(r'<span[^>]*>|<\/span[^>]*>')
     for raw_line in formatted_tab_string.split('\n'):
@@ -205,7 +202,7 @@ def html_tab_to_json_dict(html_body: str, pre_class_tags: List[str]) -> Dict[str
         else:
             tab.append_lyric_line(line)
 
-    # Info basilari (se disponibili dal DOM legacy), altrimenti UNKNOWN
+    
     try:
         song_title = soup.find(attrs={'itemprop': 'name'}).text.strip()
     except Exception:

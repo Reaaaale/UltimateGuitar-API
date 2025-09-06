@@ -7,9 +7,7 @@ import cloudscraper
 from bs4 import BeautifulSoup
 
 from ug_parser import html_tab_to_json_dict
- # la tua funzione aggiornata (__NEXT_DATA__ + fallback <pre>)
 
-# Headers "da browser"
 BROWSER_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -21,7 +19,7 @@ BROWSER_HEADERS = {
     "Connection": "keep-alive",
 }
 
-UG_PRE_CLASSES = ['js-tab-content', 'js-copy-content', 'js-store']  # solo hint legacy
+UG_PRE_CLASSES = ['js-tab-content', 'js-copy-content', 'js-store'] 
 
 _scraper = cloudscraper.create_scraper()  # <-- al posto di requests
 RENDER_WAIT_SELECTORS = [
@@ -83,7 +81,7 @@ def _normalize_to_www(original_url: str) -> str:
 
 def _get_html(url: str) -> str:
     resp = _scraper.get(url, headers=BROWSER_HEADERS, timeout=25)
-    # LOG MINIMI
+    # LOG di debug base
     print(f"[fetch] status={resp.status_code} url={resp.url} len={len(resp.text)}")
     resp.raise_for_status()
     return resp.text

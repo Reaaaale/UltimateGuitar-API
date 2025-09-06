@@ -51,7 +51,7 @@ def tab(url: str = Query(..., description="Ultimate Guitar tab URL")):
         raise HTTPException(status_code=500, detail=str(e))
     
     
-    # ========== NUOVO: /tab/pdf ==========
+    
 @app.get("/tab/pdf")
 def tab_pdf(url: str = Query(..., description="Ultimate Guitar tab URL")):
     print(f"[main] /tab/pdf called with url={url}", flush=True)
@@ -92,13 +92,12 @@ def tab_pdf(url: str = Query(..., description="Ultimate Guitar tab URL")):
 
         # posizione iniziale testo
         y = height - top - 45
-        line_height = 12  # 12pt per monospace
+        line_height = 12  
         c.setFont("Courier", 10)
 
         def draw_line(text: str):
             nonlocal y
-            # Wrapping semplice: split per linee troppo lunghe
-            # (Courier ~6pt per carattere a 10pt ≈ 10–11 cmm; facciamo wrap su ~110 char)
+            
             max_chars = 110
             chunks = [text[i:i+max_chars] for i in range(0, len(text), max_chars)] or [""]
             for chunk in chunks:
@@ -112,10 +111,10 @@ def tab_pdf(url: str = Query(..., description="Ultimate Guitar tab URL")):
         # stampa contenuto
         for row in lines:
             typ = row.get("type")
-            # il tuo parser attuale mette il contenuto in "text"
+            
             text = row.get("text", "")
             if typ == "blank":
-                draw_line("")  # riga vuota
+                draw_line("")  
             elif typ in ("lyrics", "chords"):
                 draw_line(text)
             else:
@@ -126,7 +125,7 @@ def tab_pdf(url: str = Query(..., description="Ultimate Guitar tab URL")):
         c.save()
         buf.seek(0)
 
-        # nome file carino
+        
         safe_title = (title or "tab").replace("/", "-").replace("\\", "-")
         filename = f"{safe_title}.pdf"
 
