@@ -1,6 +1,7 @@
 # Ultimate Guitar Tabs → PDF API
 
 Questa API consente di inserire un **link di Ultimate Guitar** e ricevere in risposta un file **PDF con gli accordi e il testo**.
+Questo progetto prende spunto dall'API di https://github.com/joncardasis/ultimate-api.git che risulta ormai non più funzionante.
 
 ---
 
